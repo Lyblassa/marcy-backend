@@ -4,6 +4,7 @@ import com.example.marcybackend.model.User;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="client", schema = "marcy_bd")
 public class Client {
 
     @Id

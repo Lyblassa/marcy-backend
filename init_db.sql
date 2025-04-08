@@ -114,3 +114,5 @@ INSERT INTO Decodeur_Chaine (decodeur_id, chaine_id) VALUES
                                                          (10, 3),
                                                          (11, 4),
                                                          (12, 5);
+
+select * from Decodeur_Chaine;

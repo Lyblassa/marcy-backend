@@ -52,4 +52,19 @@ public class DecodeurService {
         decodeur.getChaines().remove(chaine); // Retirer la chaîne du décodeur
         decodeurRepository.save(decodeur);
     }
+
+    public Long getDecoderIdByIp(String ip) {
+        Decodeur decoder = decodeurRepository.findByIp(ip);
+        if (decoder != null) {
+            return decoder.getId();
+        }
+        throw new RuntimeException("Decoder not found for IP: " + ip);
+    }
+
+    // Récupérer les chaînes associées à un décodeur via son ID
+    public List<Chaine> getChannelsForDecoder(Long decoderId) {
+        // Appel au repository Chaine pour récupérer les chaînes par decoderId
+        return chaineRepository.findByDecodeursId(decoderId);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.marcybackend.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="notification", schema = "marcy_bd")
 public class Notification {
 
     @Id

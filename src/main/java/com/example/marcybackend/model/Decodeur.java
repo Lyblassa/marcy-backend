@@ -2,10 +2,12 @@ package com.example.marcybackend.model;
 
 import com.example.marcybackend.model.Client;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "decodeur", schema = "marcy_bd")
 public class Decodeur {
 
     @Id
@@ -16,6 +18,13 @@ public class Decodeur {
     private Client client; // Référence à la table Client
 
     @ManyToMany
+    @JoinTable(
+            name = "decodeur_chaine",
+            schema = "marcy_bd",
+            joinColumns = @JoinColumn(name = "decodeur_id"),
+            inverseJoinColumns = @JoinColumn(name = "chaine_id")
+    )
+    @JsonManagedReference
     private List<Chaine> chaines; // Liste des chaînes associées au décodeur
 
     // Constructeur
