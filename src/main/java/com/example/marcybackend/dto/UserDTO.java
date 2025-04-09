@@ -4,14 +4,16 @@ public class UserDTO {
 
     private Long id;
     private String email;
+    private String password;
     private String role;  // 'client' ou 'administrateur'
 
     // Constructeurs
     public UserDTO() {}
 
-    public UserDTO(Long id, String email, String role) {
+    public UserDTO(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.role = role;
     }
 

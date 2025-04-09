@@ -8,18 +8,25 @@ import jakarta.persistence.*;
 public class Client {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom;
     private String prenom;
 
-    @ManyToOne
+    private String numeroTelephone;
+    private String adresse;
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user; // Référence à la table User
 
     // Constructeur
-    public Client(Long id, String nom, String prenom, User user) {
+    public Client(Long id, String nom, String prenom, String numeroTelephone, String adresse, User user) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
+        this.numeroTelephone = numeroTelephone;
+        this.adresse = adresse;
         this.user = user;
     }
 
@@ -56,5 +63,21 @@ public class Client {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getNumeroTelephone() {
+        return numeroTelephone;
+    }
+
+    public void setNumeroTelephone(String numeroTelephone) {
+        this.numeroTelephone = numeroTelephone;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 }

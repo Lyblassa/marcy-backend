@@ -3,6 +3,7 @@ package com.example.marcybackend.controller;
 import com.example.marcybackend.dto.UserDTO;
 import com.example.marcybackend.model.User;
 import com.example.marcybackend.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +31,12 @@ public class UserController {
         return userService.getUserDTOById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTO> addUser(@RequestBody User user){
-        User insertedUser = this.userService.insertUser(user);
-        return ResponseEntity.ok(userService.mapToDTO(insertedUser));
+    // UserController.java
+    @PostMapping("/create")
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        User newUser = userService.createUser(user);
+        UserDTO userDTO = new UserDTO(newUser.getId(), newUser.getEmail(), newUser.getPassword(), newUser.getRole());
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @PutMapping

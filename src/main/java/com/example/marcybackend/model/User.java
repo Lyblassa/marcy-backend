@@ -7,16 +7,20 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private String motDePasse;
-    private String role;  // Peut être 'client' ou 'administrateur'
+    private String password;
+    private String role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)  // mappedBy indique que la relation est déjà définie dans Client
+    private Client client;
 
     // Constructeur
-    public User(Long id, String email, String motDePasse, String role) {
+    public User(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
-        this.motDePasse = motDePasse;
+        this.password = password;
         this.role = role;
     }
 
@@ -39,12 +43,12 @@ public class User {
         this.email = email;
     }
 
-    public String getMotDePasse() {
-        return motDePasse;
+    public String getPassword() {
+        return password;
     }
 
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {
