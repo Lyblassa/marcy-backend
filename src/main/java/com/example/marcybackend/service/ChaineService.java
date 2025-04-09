@@ -16,5 +16,7 @@ public class ChaineService {
 
     // Exemple dans le service pour récupérer les chaînes associées à un décodeur via la table decodeur_chaine
 
-
+public List<Chaine> getChaines() {
+    return (List<Chaine>) chaineRepository.findAll();
+}
 }
