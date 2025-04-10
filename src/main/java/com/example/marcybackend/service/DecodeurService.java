@@ -1,7 +1,9 @@
 package com.example.marcybackend.service;
 
+import com.example.marcybackend.model.Client;
 import com.example.marcybackend.model.Decodeur;
 import com.example.marcybackend.model.Chaine;
+import com.example.marcybackend.repository.ClientRepository;
 import com.example.marcybackend.repository.DecodeurRepository;
 import com.example.marcybackend.repository.ChaineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,10 @@ public class DecodeurService {
     private DecodeurRepository decodeurRepository;
 
     @Autowired
-    private ChaineRepository chaineRepository;
+    private ClientRepository clientRepository;
 
-    // Assigner un décodeur à un client
-    public Decodeur assignDecodeurToClient(Decodeur decodeur) {
-        return decodeurRepository.save(decodeur);
-    }
+    @Autowired
+    private ChaineRepository chaineRepository;
 
     // Obtenir les décodeurs d'un client
     public List<Decodeur> getDecodeursForClient(Long clientId) {
@@ -66,5 +66,39 @@ public class DecodeurService {
         // Appel au repository Chaine pour récupérer les chaînes par decoderId
         return chaineRepository.findByDecodeursId(decoderId);
     }
+
+    // Retirer un décodeur d'un client
+    public Decodeur removeDecodeurFromClient(Long clientId, Long decodeurId) {
+        Decodeur decodeur = decodeurRepository.findById(decodeurId)
+                .orElseThrow(() -> new RuntimeException("Decodeur not found"));
+
+        // Vérifier si le décodeur est associé au client
+        if (decodeur.getClient() != null && decodeur.getClient().getId().equals(clientId)) {
+            decodeur.setClient(null);  // Dissocier le client
+            return decodeurRepository.save(decodeur);  // Sauvegarder l'association
+        } else {
+            throw new RuntimeException("Le décodeur n'est pas associé à ce client");
+        }
+    }
+
+    // Obtenir les décodeurs non assignés à un client
+    public List<Decodeur> getAvailableDecoders() {
+        return decodeurRepository.findByClientIdIsNull();  // Si `clientId` est null, ce décodeur est disponible
+    }
+
+    public Decodeur assignDecodeurToClient(Long clientId, Long decodeurId) {
+        Decodeur decodeur = decodeurRepository.findById(decodeurId)
+                .orElseThrow(() -> new RuntimeException("Decodeur not found"));
+
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+
+        // Assigner le décodeur au client
+        decodeur.setClient(client);
+        return decodeurRepository.save(decodeur); // Sauvegarder l'association
+    }
+
+
+
 
 }

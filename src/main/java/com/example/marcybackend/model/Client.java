@@ -3,6 +3,8 @@ package com.example.marcybackend.model;
 import com.example.marcybackend.model.User;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="client", schema = "marcy_bd")
 public class Client {
@@ -19,6 +21,9 @@ public class Client {
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user; // Référence à la table User
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Decodeur> decodeurs;
 
     // Constructeur
     public Client(Long id, String nom, String prenom, String numeroTelephone, String adresse, User user) {

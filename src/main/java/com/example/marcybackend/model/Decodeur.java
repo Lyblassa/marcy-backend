@@ -15,6 +15,7 @@ public class Decodeur {
     private String ip;
 
     @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client; // Référence à la table Client
 
     @ManyToMany

@@ -11,4 +11,6 @@ public interface DecodeurRepository extends CrudRepository<Decodeur, Long> {
     List<Decodeur> findByClientId(Long clientId);
 
     Decodeur findByIp(String ip);
+
+    List<Decodeur> findByClientIdIsNull();
 }

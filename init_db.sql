@@ -4,10 +4,10 @@ DROP TABLE IF EXISTS Decodeur;
 DROP TABLE IF EXISTS Chaine;
 DROP TABLE IF EXISTS Client;
 DROP TABLE IF EXISTS Administrateur;
-DROP TABLE IF EXISTS "User";
+DROP TABLE IF EXISTS "user";
 
 -- Table User (pour stocker les informations communes des utilisateurs)
-CREATE TABLE "User" (
+CREATE TABLE "user" (
                         id SERIAL PRIMARY KEY,
                         email VARCHAR(100) UNIQUE,
                         password VARCHAR(100),
@@ -19,7 +19,7 @@ CREATE TABLE Administrateur (
                                 id SERIAL PRIMARY KEY,
                                 nom VARCHAR(50),
                                 prenom VARCHAR(50),
-                                user_id INTEGER REFERENCES "User"(id) ON DELETE CASCADE
+                                user_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE
 );
 
 -- Table Client (référence à la table User)
@@ -27,7 +27,7 @@ CREATE TABLE Client (
                         id SERIAL PRIMARY KEY,
                         nom VARCHAR(50),
                         prenom VARCHAR(50),
-                        user_id INTEGER REFERENCES "User"(id) ON DELETE CASCADE
+                        user_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE
 );
 
 -- Table Décodeur
@@ -51,11 +51,11 @@ CREATE TABLE Decodeur_Chaine (
 );
 
 -- Insertion de l'administrateur dans la table User
-INSERT INTO "User" (email, password, role)
+INSERT INTO "user" (email, password, role)
 VALUES ('admin@decodeur.com', 'admin123', 'administrateur');
 
 -- Insertion d'un client dans la table User
-INSERT INTO "User" (email, password, role)
+INSERT INTO "user" (email, password, role)
 VALUES ('alice.dupont@email.com', '1234', 'client'),
        ('bob.lemoine@email.com', 'abcd', 'client'),
        ('carla.nguyen@email.com', 'pass123', 'client'),
@@ -90,6 +90,8 @@ INSERT INTO Decodeur (ip, client_id) VALUES
                                          ('127.0.10.10', 5),
                                          ('127.0.10.11', 6),
                                          ('127.0.10.12', 6);
+
+INSERT INTO marcy_bd.decodeur(ip) VALUES('127.0.10.13');
 
 -- Insertion de chaînes
 INSERT INTO Chaine (nom) VALUES
@@ -145,6 +147,19 @@ SET numero_telephone = '416-123-4567', adresse = '987 Yonge Street, Toronto, Ont
 WHERE id = 6;
 
 
+ALTER TABLE marcy_bd.decodeur_chaine
+    DROP CONSTRAINT decodeur_chaine_pkey;
+
+-- Ajouter la colonne `id` auto-incrémentée
+ALTER TABLE marcy_bd.decodeur_chaine
+    ADD COLUMN id SERIAL PRIMARY KEY;
+
+-- Ajouter les contraintes de clé étrangère si elles ne sont pas encore définies
+ALTER TABLE marcy_bd.decodeur_chaine
+    ADD CONSTRAINT fk_decodeur_id FOREIGN KEY (decodeur_id) REFERENCES marcy_bd.decodeur(id) ON DELETE CASCADE;
+
+ALTER TABLE marcy_bd.decodeur_chaine
+    ADD CONSTRAINT fk_chaine_id FOREIGN KEY (chaine_id) REFERENCES marcy_bd.chaine(id) ON DELETE CASCADE;
 
 
 
