@@ -71,4 +71,17 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    // Obtenir un client à partir de son user_id
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Client> getClientByUserId(@PathVariable Long userId) {
+        try {
+            Client client = clientService.getClientByUserId(userId);
+            return ResponseEntity.ok(client);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
 }

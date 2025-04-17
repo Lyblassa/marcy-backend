@@ -87,4 +87,9 @@ public class ClientService {
         }
     }
 
+    public Client getClientByUserId(Long userId) {
+        return clientRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Client not found for userId " + userId));
+    }
+
 }
